@@ -1,0 +1,27 @@
+server:
+  port: 6237
+  undertow:
+    max-http-post-size: 0
+    threads:
+      io: 1
+      worker: 4
+
+info:
+  app:
+    version: 1.0.0
+    name: janitor-server
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,env,configprops,trace
+
+janitor:
+  registry:
+    cache: /app/janitor-server/janitor/app-reg-cache.json
+  etcd:
+    server: http://127.0.0.1:2379
+    authority: false
+    user: root
+    password: root
