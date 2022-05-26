@@ -1,0 +1,48 @@
+server:
+  port: 8080
+  undertow:
+    direct-buffers: true
+    max-http-post-size: 0
+    threads:
+      io: 12
+      worker: 500
+
+info:
+  app:
+    version: 1.0.0
+    name: janitor-admin
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,env,configprops,trace
+
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+  application:
+    name: janitor-admin
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/janitor?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2b8&useSSL=false
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      auto-commit: true
+      connection-test-query: SELECT 1
+      connection-timeout: 10000
+      pool-name: DatebookHikariCP
+      maximum-pool-size: 100
+      max-lifetime: 1800000
+      minimum-idle: 5
+      idle-timeout: 30000
+
+janitor:
+  etcd:
+    server: http://127.0.0.1:2379
+    authority: false
+    user: root
+    password: root
