@@ -42,7 +42,7 @@ janitor项目**核心流程**：`janitor-server`接收到客户端注册请求�
 
 
 
-<img src="./image/janitor-部署架构图.png" style="zoom:100%;" />
+<img src="./image/janitor-部署架构.png" style="zoom:100%;" />
 
 
 
