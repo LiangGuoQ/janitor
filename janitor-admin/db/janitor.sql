@@ -1,10 +1,10 @@
 -- auto-generated definition
-create table app_event
+create table t_app_event
 (
     id             bigint auto_increment primary key,
     app_name       varchar(100)              not null comment '应用名称',
     event_type     varchar(100)              not null comment '事件类型',
-    event_value  varchar(2048) default '2' null comment '事件内容',
+    event_value    varchar(2048) default '2' null comment '事件内容',
     create_time    datetime                  null comment '创建时间',
     update_time    datetime                  null comment '更新时间',
     target_ip_list varchar(1024)             null comment '推送ip列表'
@@ -16,7 +16,7 @@ create index idx_app_name
     comment 'appName索引';
 
 -- auto-generated definition
-create table app_event_detail
+create table t_app_event_detail
 (
     id            bigint auto_increment primary key,
     event_id      bigint               not null comment '事件id',
