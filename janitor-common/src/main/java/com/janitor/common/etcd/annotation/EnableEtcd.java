@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * ClassName EnableEtcd
  * Description
  *
- * @author lianggq4
+ * @author 曦逆
  * Date 2022/5/25 9:12
  */
 @Target(ElementType.TYPE)

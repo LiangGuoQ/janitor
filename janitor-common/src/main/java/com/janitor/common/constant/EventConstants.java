@@ -4,7 +4,7 @@ package com.janitor.common.constant;
  * ClassName EventConstants
  * Description
  *
- * @author lianggq4
+ * @author 曦逆
  * Date 2022/5/26 14:56
  */
 public class EventConstants {

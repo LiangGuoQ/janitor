@@ -14,7 +14,7 @@ import static com.janitor.admin.base.BaseModel.UPDATE_TIME_FIELD_NAME;
  * ClassName BaseModelMetaObjectHandler
  * Description
  *
- * @author lianggq4
+ * @author 曦逆
  * Date 2022/5/24 17:22
  */
 @Slf4j

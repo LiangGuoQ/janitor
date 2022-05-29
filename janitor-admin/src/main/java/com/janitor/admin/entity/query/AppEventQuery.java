@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
  * ClassName AppEventQuery
  * Description
  *
- * @author lianggq4
+ * @author 曦逆
  * Date 2022/5/26 15:15
  */
 @Data

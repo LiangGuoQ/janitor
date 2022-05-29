@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
  * ClassName JanitorAdminConfig
  * Description
  *
- * @author lianggq4
+ * @author 曦逆
  * Date 2022/5/24 16:59
  */
 @EnableEtcd

@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * ClassName AppEventPushDTO
  * Description
  *
- * @author lianggq4
+ * @author 曦逆
  * Date 2022/5/26 14:22
  */
 @Data

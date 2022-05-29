@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
  * ClassName JanitorServerConfig
  * Description
  *
- * @author lianggq4
+ * @author 曦逆
  * Date 2022/5/24 16:07
  */
 @EnableEtcd

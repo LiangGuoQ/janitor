@@ -6,7 +6,7 @@ import java.util.List;
  * ClassName AppService
  * Description
  *
- * @author lianggq4
+ * @author 曦逆
  * Date 2022/5/26 13:41
  */
 public interface AppService {
