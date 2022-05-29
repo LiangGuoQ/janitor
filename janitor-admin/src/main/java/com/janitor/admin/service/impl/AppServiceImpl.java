@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.janitor.common.constant.EventConstants.HEARTBEAT_PREFIX;
+
 /**
  * ClassName AppServiceImpl
  * Description
@@ -22,10 +24,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class AppServiceImpl implements AppService {
-    /**
-     * 约定的心跳前缀
-     */
-    private static final String HEARTBEAT_PREFIX = "heartbeat.";
 
     @Autowired
     private EtcdDao etcdDao;
