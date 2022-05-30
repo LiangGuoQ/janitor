@@ -38,3 +38,30 @@ create index idx_event_id
     on t_app_event_detail (event_id)
     comment '关联事件id索引';
 
+-- auto-generated definition
+create table t_app_conf
+(
+    id          bigint auto_increment comment '主键ID' primary key,
+    app_name    varchar(100)         not null comment '应用名称',
+    conf_key    varchar(128)         not null comment '应用配置KEY',
+    conf_value  varchar(1024)        null comment '应用配置内容',
+    remark      varchar(256)         null comment '备注',
+    status      tinyint(1) default 1 null comment '0-已发布 1-新增 2-修改 3-删除 4-发布后修改',
+    create_time datetime             null comment '创建时间',
+    update_time datetime             null comment '更新时间'
+)
+    comment '应用配置';
+
+-- auto-generated definition
+create table t_app_conf_his
+(
+    id          bigint auto_increment comment '主键ID' primary key,
+    version     bigint        not null comment '应用配置版本',
+    app_name    varchar(100)  not null comment '应用名称',
+    conf_key    varchar(128)  not null comment '应用配置KEY',
+    conf_value  varchar(1024) null comment '应用配置内容',
+    remark      varchar(256)  null comment '备注',
+    create_time datetime      null comment '创建时间',
+    update_time datetime      null comment '更新时间'
+)
+    comment '应用配置历史记录表';
