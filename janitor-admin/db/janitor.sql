@@ -48,7 +48,9 @@ create table t_app_conf
     remark      varchar(256)         null comment '备注',
     status      tinyint(1) default 1 null comment '0-已发布 1-新增 2-修改 3-删除 4-发布后修改',
     create_time datetime             null comment '创建时间',
-    update_time datetime             null comment '更新时间'
+    update_time datetime             null comment '更新时间',
+    constraint uk_app_name_conf_key
+        unique (app_name, conf_key)
 )
     comment '应用配置';
 
@@ -65,3 +67,18 @@ create table t_app_conf_his
     update_time datetime      null comment '更新时间'
 )
     comment '应用配置历史记录表';
+
+-- auto-generated definition
+create table t_app_version
+(
+    id          bigint auto_increment comment '主键ID'
+        primary key,
+    app_name    varchar(100) not null comment '应用名称',
+    version     bigint       null comment '版本号',
+    create_time datetime     null comment '创建时间',
+    update_time datetime     null comment '更新时间',
+    constraint uk_app_name
+        unique (app_name)
+)
+    comment '应用版本表';
+

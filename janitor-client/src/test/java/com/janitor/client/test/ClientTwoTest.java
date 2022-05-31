@@ -19,7 +19,7 @@ public class ClientTwoTest {
 
     @SneakyThrows
     public static void main(String[] args) {
-        JanitorHelper janitorHelper = new JanitorHelper("/app/client", "client2", "client2.testConfig");
+        JanitorHelper janitorHelper = new JanitorHelper("/app/client", "client2", "client2");
         janitorHelper.addEventListener(
                 new AbstractEventListener(3, 10, false) {
                     @Override

@@ -54,4 +54,11 @@ public class Result {
                 .msg(msg)
                 .build();
     }
+
+    public static Result fail(Integer code, String msg) {
+        return Result.builder()
+                .code(code)
+                .msg(msg)
+                .build();
+    }
 }

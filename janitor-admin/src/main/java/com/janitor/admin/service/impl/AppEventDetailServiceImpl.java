@@ -26,7 +26,8 @@ public class AppEventDetailServiceImpl extends ServiceImpl<AppEventDetailMapper,
     public IPage<AppEventDetail> pageForList(AppEventDetailQuery query) {
         IPage<AppEventDetail> page = new Page<>(query.getPageNo(), query.getPageSize());
         LambdaQueryWrapper<AppEventDetail> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(ObjectUtil.isNotNull(query.getEventId()), AppEventDetail::getEventId, query.getEventId());
+        queryWrapper.eq(ObjectUtil.isNotNull(query.getEventId()), AppEventDetail::getEventId, query.getEventId())
+                .orderByDesc(AppEventDetail::getId);
         return this.getBaseMapper().selectPage(page, queryWrapper);
     }
 }

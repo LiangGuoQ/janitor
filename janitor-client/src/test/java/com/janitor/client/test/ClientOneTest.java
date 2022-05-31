@@ -25,7 +25,7 @@ public class ClientOneTest {
          *      app：客户端唯一标识
          *      configs：指定配置监听的etcd的key的前缀
          */
-        JanitorHelper janitorHelper = new JanitorHelper("/app/client", "client1", "client1.testConfig");
+        JanitorHelper janitorHelper = new JanitorHelper("/app/client", "client1", "client1");
 
         janitorHelper
                 // 添加事件监听器，指定event类型，当事件订阅到，可以在exec()处理自定义逻辑

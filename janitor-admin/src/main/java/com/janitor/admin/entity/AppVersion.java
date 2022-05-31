@@ -10,39 +10,32 @@ import lombok.*;
 
 /**
  * <p>
- * 应用配置
+ * 应用版本表
  * </p>
  *
  * @author 曦逆
- * @since 2022-05-30
+ * @since 2022-05-31
  */
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_app_conf")
-@ApiModel(value = "AppConf对象", description = "应用配置")
-public class AppConf extends BaseModel {
+@TableName("t_app_version")
+@ApiModel(value = "AppVersion对象", description = "应用版本表")
+public class AppVersion extends BaseModel {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "主键ID")
+    @ApiModelProperty(value = "主键ID", hidden = true)
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty("应用名称")
     private String appName;
 
-    @ApiModelProperty("应用配置KEY")
-    private String confKey;
+    @ApiModelProperty("版本号")
+    private Long version;
 
-    @ApiModelProperty("应用配置内容")
-    private String confValue;
 
-    @ApiModelProperty("备注")
-    private String remark;
-
-    @ApiModelProperty(value = "0-已发布 1-新增 2-修改 3-删除 4-发布后修改", hidden = true)
-    private Integer status;
 }

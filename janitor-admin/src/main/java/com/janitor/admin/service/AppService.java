@@ -1,6 +1,7 @@
 package com.janitor.admin.service;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * ClassName AppService
@@ -16,7 +17,7 @@ public interface AppService {
      *
      * @return 应用列表
      */
-    List<String> getAppNameList();
+    Set<String> getAppNameList();
 
     /**
      * 获取应用心跳维护的ip列表

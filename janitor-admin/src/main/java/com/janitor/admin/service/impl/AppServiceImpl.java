@@ -1,7 +1,9 @@
 package com.janitor.admin.service.impl;
 
 import cn.hutool.core.collection.ListUtil;
+import com.janitor.admin.entity.AppConf;
 import com.janitor.admin.service.AppService;
+import com.janitor.admin.service.IAppConfService;
 import com.janitor.common.etcd.dao.EtcdDao;
 import com.janitor.common.json.JsonUtil;
 import com.janitor.common.model.EtcdAppHeartbeatDTO;
@@ -9,7 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.janitor.common.constant.EventConstants.HEARTBEAT_PREFIX;
@@ -28,21 +32,30 @@ public class AppServiceImpl implements AppService {
     @Autowired
     private EtcdDao etcdDao;
 
+    @Autowired
+    private IAppConfService iAppConfService;
+
     @Override
-    public List<String> getAppNameList() {
+    public Set<String> getAppNameList() {
         try {
-            return etcdDao.getEtcdServiceV3().getPrefix(HEARTBEAT_PREFIX)
+            Set<String> etcdSet = etcdDao.getEtcdServiceV3().getPrefix(HEARTBEAT_PREFIX)
                     .keySet()
                     .stream()
                     .map(s -> {
                         String[] split = s.split("\\.", 3);
                         return split[1];
                     })
-                    .distinct()
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toSet());
+            List<AppConf> confList = iAppConfService.lambdaQuery()
+                    .select(AppConf::getAppName)
+                    .groupBy(AppConf::getAppName)
+                    .list();
+            Set<String> confSet = confList.stream().map(AppConf::getAppName).collect(Collectors.toSet());
+            etcdSet.addAll(confSet);
+            return etcdSet;
         } catch (Exception e) {
             log.error("获取应用列表出错", e);
-            return ListUtil.empty();
+            return new HashSet<>();
         }
     }
 

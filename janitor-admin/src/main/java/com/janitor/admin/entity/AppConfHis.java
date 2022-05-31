@@ -6,8 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.janitor.admin.base.BaseModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * <p>
@@ -19,6 +18,9 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @TableName("t_app_conf_his")
 @ApiModel(value = "AppConfHis对象", description = "应用配置历史记录表")
 public class AppConfHis extends BaseModel {
