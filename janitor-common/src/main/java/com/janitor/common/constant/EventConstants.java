@@ -24,4 +24,9 @@ public class EventConstants {
      */
     public static final String HEARTBEAT_PREFIX = "heartbeat.";
 
+
+    /**
+     * 约定的事件消息确认字段
+     */
+    public static final String EVENT_RESPONSE = "response";
 }

@@ -12,4 +12,8 @@ public class RedisKeysUtil {
     public static String getRefreshLockKey(String appName) {
         return "app:conf:lock:" + appName;
     }
+
+    public static String getScheduleLockKey(Long eventDetailId) {
+        return "app:schedule:lock:" + eventDetailId;
+    }
 }

@@ -22,7 +22,7 @@ create table t_app_event_detail
     event_id      bigint               not null comment '事件id',
     app_name      varchar(100)         not null comment '应用名称',
     target_ip     varchar(200)         not null comment '推送ip',
-    push_result   tinyint(1) default 2 null comment '推送结果 2-未知 1成功 1-失败',
+    push_result   tinyint(1) default 2 null comment '推送结果 2-未知 1-成功 0-失败',
     error_content varchar(1024)        null comment '错误信息',
     create_time   datetime             null comment '创建时间',
     update_time   datetime             null comment '更新时间',

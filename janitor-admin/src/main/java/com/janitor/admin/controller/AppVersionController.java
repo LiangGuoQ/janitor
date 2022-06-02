@@ -31,7 +31,7 @@ public class AppVersionController {
     private IAppVersionService iAppVersionService;
 
     @ApiOperation("获取应用历史版本号列表")
-    @ApiImplicitParam(name = "appName", value = "应用名称", dataType = "String")
+    @ApiImplicitParam(name = "appName", value = "应用名称", dataTypeClass = String.class)
     @GetMapping("/list")
     public Result listAppVersion(String appName) {
         Long version = iAppVersionService.getVersion(appName);

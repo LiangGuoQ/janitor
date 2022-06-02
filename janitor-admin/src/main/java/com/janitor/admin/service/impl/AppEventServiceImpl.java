@@ -9,6 +9,7 @@ import com.janitor.admin.entity.AppEvent;
 import com.janitor.admin.entity.AppEventDetail;
 import com.janitor.admin.entity.dto.AppEventPushDTO;
 import com.janitor.admin.entity.query.AppEventQuery;
+import com.janitor.admin.exception.JanitorAdminException;
 import com.janitor.admin.mapper.AppEventMapper;
 import com.janitor.admin.service.IAppEventDetailService;
 import com.janitor.admin.service.IAppEventService;
@@ -64,7 +65,7 @@ public class AppEventServiceImpl extends ServiceImpl<AppEventMapper, AppEvent> i
             Assert.isTrue(pushResult, "往ETCD推送消息失败");
         } catch (Exception e) {
             log.error("往ETCD推送消息失败", e);
-            throw e;
+            throw JanitorAdminException.of(e, "往ETCD推送消息失败");
         }
         return appEvent.getId();
     }

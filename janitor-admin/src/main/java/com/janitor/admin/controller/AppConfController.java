@@ -32,6 +32,17 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("/v1/appConf")
 public class AppConfController {
 
+    /**
+     * 最大等待锁时间
+     */
+    private static final long REFRESH_MAX_WAIT_LOCK_TIME = 200L;
+
+    /**
+     * 最大等待锁自动释放时间
+     */
+    private static final long REFRESH_MAX_WAIT_RELEASE_TIME = 120000L;
+
+
     @Autowired
     private IAppConfService iAppConfService;
 
@@ -39,23 +50,22 @@ public class AppConfController {
     private RedissonClient redissonClient;
 
     @ApiOperation("获取配置列表")
-    @ApiImplicitParam(name = "query", value = "获取配置列表body", dataType = "AppConfQuery")
+    @ApiImplicitParam(name = "query", value = "获取配置列表body", dataTypeClass = AppConfQuery.class)
     @PostMapping("/list")
     public Result list(@RequestBody AppConfQuery query) {
         return Result.success(iAppConfService.pageForList(query));
     }
 
     @ApiOperation("添加配置")
-    @ApiImplicitParam(name = "appConf", value = "添加配置body", dataType = "AppConf")
+    @ApiImplicitParam(name = "appConf", value = "添加配置body", dataTypeClass = AppConf.class)
     @PostMapping("/add")
     public Result add(@RequestBody AppConf appConf) {
         iAppConfService.save(appConf);
         return Result.success(appConf.getId());
-
     }
 
     @ApiOperation("修改配置")
-    @ApiImplicitParam(name = "appConf", value = "修改配置body", dataType = "AppConf")
+    @ApiImplicitParam(name = "appConf", value = "修改配置body", dataTypeClass = AppConf.class)
     @PostMapping("/update")
     public Result update(@RequestBody AppConf appConf) {
         iAppConfService.update(appConf);
@@ -63,7 +73,7 @@ public class AppConfController {
     }
 
     @ApiOperation("删除配置")
-    @ApiImplicitParam(name = "id", paramType = "path", value = "主键ID", dataType = "Long")
+    @ApiImplicitParam(name = "id", paramType = "path", value = "主键ID", dataTypeClass = Long.class)
     @DeleteMapping("/delete/{id}")
     public Result delete(@PathVariable Long id) {
         iAppConfService.delete(id);
@@ -71,12 +81,12 @@ public class AppConfController {
     }
 
     @ApiOperation("发布配置")
-    @ApiImplicitParam(name = "dto", value = "发布配置body", dataType = "AppConfRefreshDTO")
+    @ApiImplicitParam(name = "dto", value = "发布配置body", dataTypeClass = AppConfRefreshDTO.class)
     @PostMapping("/refresh")
     public Result refresh(@RequestBody AppConfRefreshDTO dto) {
         RLock lock = redissonClient.getLock(RedisKeysUtil.getRefreshLockKey(dto.getAppName()));
         try {
-            if (lock.tryLock(200L, 120000L, TimeUnit.MILLISECONDS)) {
+            if (lock.tryLock(REFRESH_MAX_WAIT_LOCK_TIME, REFRESH_MAX_WAIT_RELEASE_TIME, TimeUnit.MILLISECONDS)) {
                 AppConfRefreshBO bo = iAppConfService.refresh(dto);
                 return Result.success(bo);
             } else {
@@ -89,7 +99,7 @@ public class AppConfController {
             try {
                 lock.unlock();
             } catch (Exception e) {
-                log.error("UNLOCK FAILED: key={}", RedisKeysUtil.getRefreshLockKey(dto.getAppName()), e);
+                log.error("UNLOCK FAILED: key={}", lock.getName(), e);
             }
         }
     }

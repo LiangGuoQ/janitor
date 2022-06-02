@@ -35,21 +35,21 @@ public class AppEventController {
     private IAppEventDetailService appEventDetailService;
 
     @ApiOperation("主动推送事件消息")
-    @ApiImplicitParam(name = "dto", value = "主动推送事件消息body", dataType = "AppEventPushDTO")
+    @ApiImplicitParam(name = "dto", value = "主动推送事件消息body", dataTypeClass = AppEventPushDTO.class)
     @PostMapping("/push")
     public Result push(@RequestBody AppEventPushDTO dto) {
         return Result.success(appEventService.push(dto));
     }
 
     @ApiOperation("获取推送事件列表")
-    @ApiImplicitParam(name = "query", value = "获取推送事件列表body", dataType = "AppEventQuery")
+    @ApiImplicitParam(name = "query", value = "获取推送事件列表body", dataTypeClass = AppEventQuery.class)
     @PostMapping("/list")
     public Result list(@RequestBody AppEventQuery query) {
         return Result.success(appEventService.pageForList(query));
     }
 
     @ApiOperation("获取推送事件详细列表")
-    @ApiImplicitParam(name = "query", value = "获取推送事件详细列表body", dataType = "AppEventDetailQuery")
+    @ApiImplicitParam(name = "query", value = "获取推送事件详细列表body", dataTypeClass = AppEventDetailQuery.class)
     @PostMapping("/detail/list")
     public Result listDetails(@RequestBody AppEventDetailQuery query) {
         return Result.success(appEventDetailService.pageForList(query));

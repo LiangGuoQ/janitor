@@ -29,7 +29,7 @@ public class AppConfHisController {
     private IAppConfHisService iAppConfHisService;
 
     @ApiOperation("获取配置历史记录列表")
-    @ApiImplicitParam(name = "query", value = "获取推送事件列表body", dataType = "AppConfHisQuery")
+    @ApiImplicitParam(name = "query", value = "获取推送事件列表body", dataTypeClass = AppConfHisQuery.class)
     @PostMapping("/list")
     public Result list(@RequestBody AppConfHisQuery query) {
         return Result.success(iAppConfHisService.pageForList(query));

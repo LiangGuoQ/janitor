@@ -109,7 +109,7 @@ public class JanitorEventService {
             this.etcdDao.getEtcdServiceV3().watch(key, key, (info) -> {
                         EtcdEventKeyValueVo kvs = info.getCurrent();
                         log.info("接收到事件相关推送，动作类型{},推送内容为{}", info.getEventType(), kvs);
-                        if (EtcdEventVo.EventType.PUT.equals(info.getEventType()) && !kvs.getValue().contains("response")) {
+                        if (EtcdEventVo.EventType.PUT.equals(info.getEventType()) && !kvs.getValue().contains(EVENT_RESPONSE)) {
                             String keyName = kvs.getKey();
                             int start = keyName.indexOf(".");
                             int end = keyName.indexOf(".", start + 1);

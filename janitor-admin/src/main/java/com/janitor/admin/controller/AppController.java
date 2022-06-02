@@ -33,7 +33,7 @@ public class AppController {
     }
 
     @ApiOperation("获取指定应用的ip列表")
-    @ApiImplicitParam(name = "appName", paramType = "query", value = "应用名称", dataType = "String")
+    @ApiImplicitParam(name = "appName", paramType = "query", value = "应用名称", dataTypeClass = String.class)
     @GetMapping("/ip/list")
     public Result listAppIps(String appName) {
         return Result.success(appService.getIpList(appName));

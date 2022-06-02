@@ -63,7 +63,7 @@ public class AppConfServiceImpl extends ServiceImpl<AppConfMapper, AppConf> impl
     public void update(AppConf appConf) {
         AppConf conf = this.getById(appConf.getId());
 
-        if (StrUtil.equals(StrUtil.trim(appConf.getConfValue()), StrUtil.trim(conf.getConfValue()))) {
+        if (StrUtil.equals(appConf.getConfValue(), conf.getConfValue())) {
             throw JanitorAdminException.of("配置内容无变化，不需要更新");
         }
 

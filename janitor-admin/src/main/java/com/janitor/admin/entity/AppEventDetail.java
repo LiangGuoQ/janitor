@@ -50,10 +50,10 @@ public class AppEventDetail extends BaseModel {
     private String targetIp;
 
     /**
-     * 推送结果 2-未知 1成功 1-失败
+     * 推送结果 2-未知 1-成功 0-失败
      */
-    @ApiModelProperty("推送结果 2-未知 1成功 1-失败")
-    private Boolean pushResult;
+    @ApiModelProperty("推送结果 2-未知 1成功 0-失败")
+    private Integer pushResult;
 
     /**
      * 错误信息

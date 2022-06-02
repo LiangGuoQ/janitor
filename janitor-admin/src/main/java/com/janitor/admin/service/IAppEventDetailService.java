@@ -23,4 +23,11 @@ public interface IAppEventDetailService extends IService<AppEventDetail> {
      */
     IPage<AppEventDetail> pageForList(AppEventDetailQuery query);
 
+    /**
+     * 定时任务逻辑
+     *
+     * @param detail 应用事件明细对象
+     */
+    void doSchedule(AppEventDetail detail);
+
 }

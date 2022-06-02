@@ -30,6 +30,6 @@ public class BaseModelMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.strictUpdateFill(metaObject, UPDATE_TIME_FIELD_NAME, LocalDateTime.class, LocalDateTime.now());
+        this.setFieldValByName( UPDATE_TIME_FIELD_NAME, LocalDateTime.now(), metaObject);
     }
 }
