@@ -7,8 +7,6 @@ import com.janitor.common.model.RegistryBean;
 import com.janitor.common.util.IpUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -21,23 +19,22 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * ClassName RegistryCacheService
+ * ClassName JanitorCacheService
  * Description
+ *  边车模式下，宿主机下的janitor-client的信息记录、宿主机的ip等信息存储本地缓存
  *
  * @author 曦逆
  * Date 2022/5/17 8:58
  */
 @Component
-public class RegistryCacheService {
-    private static final Logger log = LoggerFactory.getLogger(RegistryCacheService.class);
+public class JanitorCacheService extends AbstractRegisterService {
+    private static final Logger log = LoggerFactory.getLogger(JanitorCacheService.class);
     private List<RegistryBean> localCache;
     private String localIp;
     private static final ConcurrentHashMap<String, RegistryBean> REGISTRY_BEAN_HOLDER = new ConcurrentHashMap<>();
     private static final String REG_CACHE_KEY = "janitor.registry.cache";
-    @Autowired
-    private Environment env;
 
-    public RegistryCacheService() {
+    public JanitorCacheService() {
     }
 
     @PostConstruct
@@ -62,25 +59,22 @@ public class RegistryCacheService {
 
     }
 
+    @Override
+    public void register(RegistryBean registryBean) {
+        REGISTRY_BEAN_HOLDER.put(registryBean.getApp(), registryBean);
+        try {
+            FileUtil.writeString(JSONUtil.toJsonStr(REGISTRY_BEAN_HOLDER.values()), new File(Objects.requireNonNull(this.env.getProperty(REG_CACHE_KEY))), StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            log.error("注册信息后，写入本地缓存失败", e);
+        }
+    }
+
     public List<RegistryBean> getLocalCache() {
         return this.localCache;
     }
 
     public RegistryBean getRegistryBean(String appName) {
         return REGISTRY_BEAN_HOLDER.get(appName);
-    }
-
-    public void addRegistryBean(String appName, RegistryBean registryBean) {
-        REGISTRY_BEAN_HOLDER.put(appName, registryBean);
-    }
-
-    public void flushToLocalCache() {
-        try {
-            FileUtil.writeString(JSONUtil.toJsonStr(REGISTRY_BEAN_HOLDER.values()), new File(Objects.requireNonNull(this.env.getProperty(REG_CACHE_KEY))), StandardCharsets.UTF_8);
-        } catch (Exception e) {
-            log.error("注册信息后，写入本地缓存失败", e);
-        }
-
     }
 
     public String getLocalIp() {

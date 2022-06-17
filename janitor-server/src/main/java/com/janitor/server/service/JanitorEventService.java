@@ -4,19 +4,15 @@ import com.janitor.common.enums.EventTypeEnums;
 import com.janitor.common.etcd.EtcdEventKeyValueVo;
 import com.janitor.common.etcd.EtcdEventVo;
 import com.janitor.common.etcd.EtcdOperation;
-import com.janitor.common.etcd.dao.EtcdDao;
 import com.janitor.common.json.JsonUtil;
 import com.janitor.common.model.*;
 import com.janitor.common.util.EventLogWriter;
-import com.janitor.server.util.SnowflakeIdWorkerUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -29,34 +25,30 @@ import static com.janitor.common.constant.EventConstants.*;
 /**
  * ClassName EventAgentService
  * Description
+ * 事件信息注册
  *
  * @author 曦逆
  * Date 2022/5/17 9:22
  */
 @Component
 @SuppressWarnings("rawtypes")
-public class JanitorEventService {
+public class JanitorEventService extends AbstractRegisterService {
     private static final Logger log = LoggerFactory.getLogger(JanitorEventService.class);
-    @Autowired
-    private Environment env;
-    @Autowired
-    private EtcdDao etcdDao;
-    @Resource
-    private SnowflakeIdWorkerUtil snowflakeIdWorkerUtil;
-    @Autowired
-    private RegistryCacheService registryCacheService;
     private static final ConcurrentHashMap<String, EventLogWriter> LOG_WRITER_MAP = new ConcurrentHashMap<>();
     private volatile Map<String, Set> witheList = new HashMap<>();
     private volatile Map<String, Set> triggerMap = new HashMap<>();
+
+    @Autowired
+    protected JanitorCacheService janitorCacheService;
 
     public JanitorEventService() {
     }
 
     @PostConstruct
     public void init() {
-        List<RegistryBean> registryBeans = this.registryCacheService.getLocalCache();
+        List<RegistryBean> registryBeans = this.janitorCacheService.getLocalCache();
         if (registryBeans != null) {
-            this.registryCacheService.getLocalCache().forEach(this::registerEvent);
+            this.janitorCacheService.getLocalCache().forEach(this::register);
         }
 
         String whiteListJson = this.etcdDao.getEtcdServiceV3().get("janitor.whiteList");
@@ -102,9 +94,10 @@ public class JanitorEventService {
         );
     }
 
-    public void registerEvent(RegistryBean registryBean) {
+    @Override
+    public void register(RegistryBean registryBean) {
         if (registryBean.getEvent()) {
-            String key = EVENT_KEY_PREFIX + registryBean.getApp() + "." + this.registryCacheService.getLocalIp();
+            String key = EVENT_KEY_PREFIX + registryBean.getApp() + "." + this.janitorCacheService.getLocalIp();
             this.etcdDao.getEtcdServiceV3().cancelWatch(key);
             this.etcdDao.getEtcdServiceV3().watch(key, key, (info) -> {
                         EtcdEventKeyValueVo kvs = info.getCurrent();
@@ -149,7 +142,7 @@ public class JanitorEventService {
     public boolean heartBeat(HeartbeatDTO heartbeatDTO) {
         EtcdAppHeartbeatDTO reqObj = EtcdAppHeartbeatDTO.builder()
                 .appName(heartbeatDTO.getApp())
-                .ip(this.registryCacheService.getLocalIp())
+                .ip(this.janitorCacheService.getLocalIp())
                 .beatTime(new Date())
                 .build();
         boolean result = this.etcdDao.getEtcdServiceV3().put(HEARTBEAT_PREFIX + reqObj.getAppName() + "." + reqObj.getIp(), JsonUtil.toJson(reqObj));

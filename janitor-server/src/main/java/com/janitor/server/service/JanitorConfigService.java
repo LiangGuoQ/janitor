@@ -3,12 +3,10 @@ package com.janitor.server.service;
 import cn.hutool.core.io.FileUtil;
 import com.janitor.common.etcd.EtcdEventKeyValueVo;
 import com.janitor.common.etcd.EtcdEventVo;
-import com.janitor.common.etcd.dao.EtcdDao;
 import com.janitor.common.model.RegistryBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -24,35 +22,34 @@ import java.util.Properties;
 /**
  * ClassName ConfigAgentService
  * Description
+ * 配置信息注册
  *
  * @author 曦逆
  * Date 2022/5/17 10:01
  */
 @Service
-public class JanitorConfigService {
+public class JanitorConfigService extends AbstractRegisterService {
     private static final Logger log = LoggerFactory.getLogger(JanitorConfigService.class);
+
     @Autowired
-    private Environment env;
-    @Autowired
-    private EtcdDao etcdDao;
-    @Autowired
-    private RegistryCacheService registryCacheService;
+    protected JanitorCacheService janitorCacheService;
 
     public JanitorConfigService() {
     }
 
     @PostConstruct
     private void init() {
-        List<RegistryBean> registryBeans = this.registryCacheService.getLocalCache();
+        List<RegistryBean> registryBeans = this.janitorCacheService.getLocalCache();
         if (registryBeans != null) {
-            registryBeans.forEach(this::registerConfig);
+            registryBeans.forEach(this::register);
         }
 
     }
 
-    public void registerConfig(RegistryBean registryBean) {
+    @Override
+    public void register(RegistryBean registryBean) {
         if (registryBean != null && registryBean.getData() != null) {
-            RegistryBean oldRegistryBean = this.registryCacheService.getRegistryBean(registryBean.getApp());
+            RegistryBean oldRegistryBean = this.janitorCacheService.getRegistryBean(registryBean.getApp());
             if (oldRegistryBean != null) {
                 oldRegistryBean.getData().forEach((key) -> this.etcdDao.getEtcdServiceV3().cancelWatch(key));
             }

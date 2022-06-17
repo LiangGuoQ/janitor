@@ -2,9 +2,8 @@ package com.janitor.server.controller;
 
 import com.janitor.common.base.Result;
 import com.janitor.common.model.*;
-import com.janitor.server.service.JanitorConfigService;
 import com.janitor.server.service.JanitorEventService;
-import com.janitor.server.service.RegistryCacheService;
+import com.janitor.server.service.RegisterHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,19 +24,14 @@ import javax.validation.Valid;
 @RequestMapping({"/api"})
 public class ApiRestController {
     @Autowired
-    private JanitorConfigService janitorConfigService;
+    private RegisterHelper registerHelper;
     @Autowired
     private JanitorEventService janitorEventService;
-    @Autowired
-    private RegistryCacheService registryCacheService;
 
     @ResponseBody
     @RequestMapping({"/registry"})
     public Result registry(@RequestBody RegistryBean registryBean) {
-        this.janitorConfigService.registerConfig(registryBean);
-        this.janitorEventService.registerEvent(registryBean);
-        this.registryCacheService.addRegistryBean(registryBean.getApp(), registryBean);
-        this.registryCacheService.flushToLocalCache();
+        this.registerHelper.process(registryBean);
         return Result.success();
     }
 
