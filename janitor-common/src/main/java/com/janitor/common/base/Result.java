@@ -40,6 +40,13 @@ public class Result {
                 .build();
     }
 
+    public static Result success(String msg) {
+        return Result.builder()
+                .code(0)
+                .msg(msg)
+                .build();
+    }
+
     public static Result success(Object data, String msg) {
         return Result.builder()
                 .code(0)
